@@ -77,6 +77,15 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar"
 import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -127,7 +136,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { PageHeader } from "@/components/page-header"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import { ChevronsUpDown, Plus, Search } from "lucide-react"
 import { Terminal } from "lucide-react"
 
 function ComponentCard({ title, description, children, className }: { title: string, description: string, children: React.ReactNode, className?: string }) {
@@ -370,13 +379,22 @@ export default function ComponentsGalleryPage() {
                 </ComponentCard>
                 
                 <ComponentCard title="Input" description="Displays a form input field.">
-                    <Input type="email" placeholder="Email" className="max-w-sm" />
+                    <div className="grid w-full max-w-sm items-center gap-2.5">
+                        <Input type="email" placeholder="Email" />
+                        <Input type="password" placeholder="Password" />
+                        <div className="flex w-full max-w-sm items-center space-x-2">
+                            <Input type="email" placeholder="Search..." />
+                            <Button type="submit" size="icon"><Search className="h-4 w-4" /></Button>
+                        </div>
+                        <Input type="file" />
+                    </div>
                 </ComponentCard>
 
                 <ComponentCard title="Label" description="Renders an accessible label associated with a form control.">
-                     <div>
+                     <div className="grid w-full max-w-sm items-center gap-1.5">
                         <Label htmlFor="email-2">Your email address</Label>
-                        <Input type="email" id="email-2" placeholder="Email" className="max-w-sm" />
+                        <Input type="email" id="email-2" placeholder="Email" />
+                        <p className="text-sm text-muted-foreground">Enter your email address.</p>
                     </div>
                 </ComponentCard>
 
@@ -391,7 +409,41 @@ export default function ComponentsGalleryPage() {
                                 <MenubarItem>Share</MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
+                        <MenubarMenu>
+                            <MenubarTrigger>Edit</MenubarTrigger>
+                            <MenubarContent>
+                                <MenubarItem>Undo</MenubarItem>
+                                <MenubarItem>Redo</MenubarItem>
+                            </MenubarContent>
+                        </MenubarMenu>
                     </Menubar>
+                </ComponentCard>
+
+                <ComponentCard title="Pagination" description="Controls for navigating through a sequence of content.">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                            <PaginationPrevious href="#" />
+                            </PaginationItem>
+                            <PaginationItem>
+                            <PaginationLink href="#">1</PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                            <PaginationLink href="#" isActive>
+                                2
+                            </PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                            <PaginationLink href="#">3</PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                            <PaginationEllipsis />
+                            </PaginationItem>
+                            <PaginationItem>
+                            <PaginationNext href="#" />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
                 </ComponentCard>
 
                 <ComponentCard title="Popover" description="Displays rich content in a portal.">
@@ -465,7 +517,7 @@ export default function ComponentsGalleryPage() {
                  <ComponentCard title="Sheet" description="A side panel that slides in.">
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="outline">Open Sheet</Button>
+                            <Button variant="outline">Open Sheet</Button>                        
                         </SheetTrigger>
                         <SheetContent>
                             <SheetHeader>
