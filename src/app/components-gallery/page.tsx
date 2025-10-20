@@ -2,6 +2,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import {
   Accordion,
   AccordionContent,
@@ -136,7 +137,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { PageHeader } from "@/components/page-header"
-import { ChevronsUpDown, Plus, Search } from "lucide-react"
+import { ChevronsUpDown, Search } from "lucide-react"
 import { Terminal } from "lucide-react"
 
 function ComponentCard({ title, description, children, className }: { title: string, description: string, children: React.ReactNode, className?: string }) {
@@ -160,11 +161,30 @@ export default function ComponentsGalleryPage() {
     const [progress, setProgress] = React.useState(33)
     const [date, setDate] = React.useState<Date | undefined>(new Date())
     const [isOpen, setIsOpen] = React.useState(false)
+    const [previews, setPreviews] = React.useState<string[]>([]);
 
     React.useEffect(() => {
         const timer = setTimeout(() => setProgress(66), 500)
         return () => clearTimeout(timer)
     }, [])
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const files = Array.from(e.target.files);
+        const newPreviews = files.map(file => URL.createObjectURL(file));
+        // Clean up old previews
+        previews.forEach(p => URL.revokeObjectURL(p));
+        setPreviews(newPreviews);
+      }
+    };
+
+    React.useEffect(() => {
+      // Cleanup object URLs on unmount
+      return () => {
+        previews.forEach(p => URL.revokeObjectURL(p));
+      };
+    }, [previews]);
+
 
     return (
         <>
@@ -386,8 +406,22 @@ export default function ComponentsGalleryPage() {
                             <Input type="email" placeholder="Search..." />
                             <Button type="submit" size="icon"><Search className="h-4 w-4" /></Button>
                         </div>
-                        <Input type="file" />
                     </div>
+                </ComponentCard>
+
+                <ComponentCard title="File Upload & Preview" description="An input for selecting files with a preview.">
+                  <div className="w-full max-w-sm space-y-4">
+                    <Input id="picture" type="file" onChange={handleFileChange} multiple accept="image/*" />
+                    {previews.length > 0 && (
+                      <div className="flex gap-2 flex-wrap">
+                        {previews.map((src) => (
+                          <div key={src} className="relative h-20 w-20 rounded-md overflow-hidden border">
+                              <Image src={src} alt="File preview" fill style={{objectFit: 'cover'}} />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </ComponentCard>
 
                 <ComponentCard title="Label" description="Renders an accessible label associated with a form control.">
@@ -620,5 +654,7 @@ export default function ComponentsGalleryPage() {
         </>
     )
 }
+
+    
 
     
