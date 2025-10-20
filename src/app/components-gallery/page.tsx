@@ -50,6 +50,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { Combobox } from "@/components/ui/combobox"
 import {
   Dialog,
   DialogContent,
@@ -155,6 +156,15 @@ function ComponentCard({ title, description, children, className }: { title: str
         </Card>
     )
 }
+
+const frameworks = [
+  { value: "next.js", label: "Next.js" },
+  { value: "sveltekit", label: "SvelteKit" },
+  { value: "nuxt.js", label: "Nuxt.js" },
+  { value: "remix", label: "Remix" },
+  { value: "astro", label: "Astro" },
+];
+
 
 export default function ComponentsGalleryPage() {
     const { toast } = useToast()
@@ -361,7 +371,16 @@ export default function ComponentsGalleryPage() {
                         </CollapsibleContent>
                     </Collapsible>
                 </ComponentCard>
-                
+
+                <ComponentCard title="Combobox" description="A searchable select component.">
+                    <Combobox
+                        items={frameworks}
+                        placeholder="Select framework..."
+                        searchPlaceholder="Search frameworks..."
+                        notfoundText="No framework found."
+                    />
+                </ComponentCard>
+
                 <ComponentCard title="Dialog" description="A window overlaid on either the primary window.">
                     <Dialog>
                         <DialogTrigger asChild>
@@ -654,7 +673,3 @@ export default function ComponentsGalleryPage() {
         </>
     )
 }
-
-    
-
-    
