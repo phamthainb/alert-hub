@@ -27,6 +27,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Card,
   CardContent,
@@ -35,7 +36,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import {
   Dialog,
   DialogContent,
@@ -70,6 +83,7 @@ import {
 } from "@/components/ui/popover"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -78,6 +92,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 import {
@@ -104,17 +127,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { PageHeader } from "@/components/page-header"
+import { ChevronsUpDown, Plus } from "lucide-react"
 import { Terminal } from "lucide-react"
 
-function ComponentCard({ title, description, children }: { title: string, description: string, children: React.ReactNode }) {
+function ComponentCard({ title, description, children, className }: { title: string, description: string, children: React.ReactNode, className?: string }) {
     return (
-        <Card>
+        <Card className={className}>
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex justify-center items-center p-4 border rounded-lg bg-card-foreground/5">
+                <div className="flex justify-center items-center p-4 border rounded-lg bg-card-foreground/5 min-h-[120px]">
                     {children}
                 </div>
             </CardContent>
@@ -125,6 +149,8 @@ function ComponentCard({ title, description, children }: { title: string, descri
 export default function ComponentsGalleryPage() {
     const { toast } = useToast()
     const [progress, setProgress] = React.useState(33)
+    const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const [isOpen, setIsOpen] = React.useState(false)
 
     React.useEffect(() => {
         const timer = setTimeout(() => setProgress(66), 500)
@@ -246,6 +272,66 @@ export default function ComponentsGalleryPage() {
                         </label>
                     </div>
                 </ComponentCard>
+
+                <ComponentCard title="Calendar" description="A component for date selection.">
+                     <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        className="rounded-md border"
+                    />
+                </ComponentCard>
+                
+                <ComponentCard title="Carousel" description="A scrollable container for items.">
+                    <Carousel className="w-full max-w-[200px]">
+                        <CarouselContent>
+                            {Array.from({ length: 5 }).map((_, index) => (
+                            <CarouselItem key={index}>
+                                <div className="p-1">
+                                <Card>
+                                    <CardContent className="flex aspect-square items-center justify-center p-6">
+                                    <span className="text-4xl font-semibold">{index + 1}</span>
+                                    </CardContent>
+                                </Card>
+                                </div>
+                            </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                </ComponentCard>
+
+                <ComponentCard title="Collapsible" description="An interactive component for showing and hiding content.">
+                    <Collapsible
+                        open={isOpen}
+                        onOpenChange={setIsOpen}
+                        className="w-[350px] space-y-2"
+                        >
+                        <div className="flex items-center justify-between space-x-4 px-4">
+                            <h4 className="text-sm font-semibold">
+                            @peduarte starred 3 repositories
+                            </h4>
+                            <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="w-9 p-0">
+                                <ChevronsUpDown className="h-4 w-4" />
+                                <span className="sr-only">Toggle</span>
+                            </Button>
+                            </CollapsibleTrigger>
+                        </div>
+                        <div className="rounded-md border px-4 py-3 font-mono text-sm">
+                            @radix-ui/primitives
+                        </div>
+                        <CollapsibleContent className="space-y-2">
+                            <div className="rounded-md border px-4 py-3 font-mono text-sm">
+                            @radix-ui/colors
+                            </div>
+                            <div className="rounded-md border px-4 py-3 font-mono text-sm">
+                            @stitches/react
+                            </div>
+                        </CollapsibleContent>
+                    </Collapsible>
+                </ComponentCard>
                 
                 <ComponentCard title="Dialog" description="A window overlaid on either the primary window.">
                     <Dialog>
@@ -337,6 +423,21 @@ export default function ComponentsGalleryPage() {
                         </div>
                     </RadioGroup>
                 </ComponentCard>
+
+                <ComponentCard title="Scroll Area" description="A scrollable container with a custom scrollbar.">
+                    <ScrollArea className="h-40 w-60 rounded-md border">
+                        <div className="p-4">
+                            <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
+                            {Array.from({ length: 20 }).map((_, i, a) => (
+                                <React.Fragment key={i}>
+                                    <div>Tag {i + 1}</div>
+                                    {i < a.length - 1 && <Separator className="my-2" />}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </ScrollArea>
+                </ComponentCard>
+
                 
                 <ComponentCard title="Select" description="Displays a list of options for the user to pick from.">
                     <Select>
@@ -358,6 +459,33 @@ export default function ComponentsGalleryPage() {
                         <h4>Radix Primitives</h4>
                         <Separator className="my-2" />
                         <p>An open-source UI component library.</p>
+                    </div>
+                </ComponentCard>
+
+                 <ComponentCard title="Sheet" description="A side panel that slides in.">
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="outline">Open Sheet</Button>
+                        </SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader>
+                            <SheetTitle>Are you sure absolutely sure?</SheetTitle>
+                            <SheetDescription>
+                                This action cannot be undone. This will permanently delete your account
+                                and remove your data from our servers.
+                            </SheetDescription>
+                            </SheetHeader>
+                        </SheetContent>
+                    </Sheet>
+                </ComponentCard>
+
+                <ComponentCard title="Skeleton" description="A placeholder to indicate loading.">
+                    <div className="flex items-center space-x-4">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[250px]" />
+                            <Skeleton className="h-4 w-[200px]" />
+                        </div>
                     </div>
                 </ComponentCard>
                 
@@ -440,3 +568,5 @@ export default function ComponentsGalleryPage() {
         </>
     )
 }
+
+    
