@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from "next/link";
@@ -11,6 +12,7 @@ import {
   FileText,
   AlertTriangle,
   FileCode,
+  LayoutGrid,
 } from "lucide-react";
 import { 
   Sidebar, 
@@ -34,6 +36,8 @@ const menuItems = [
   { href: "/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/datasources", label: "Data Sources", icon: Database },
   { href: "/settings", label: "Settings", icon: Settings },
+  { type: 'divider', key: 'components-divider' },
+  { href: "/components-gallery", label: "Components", icon: LayoutGrid },
 ];
 
 export function MainSidebar() {
